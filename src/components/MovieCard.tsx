@@ -1,45 +1,27 @@
 import { Play, Plus } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useState, useRef, useEffect } from "react";
-import { gsap } from "gsap";
+import { useNavigate } from "react-router-dom";
 
 interface MovieCardProps {
+  id: number;
   title: string;
   image: string;
   rating: string;
   genre: string;
 }
 
-const MovieCard = ({ title, image, rating, genre }: MovieCardProps) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (isExpanded && cardRef.current) {
-      gsap.to(cardRef.current, {
-        scale: 1.5,
-        zIndex: 100,
-        duration: 0.4,
-        ease: "power2.out"
-      });
-    } else if (cardRef.current) {
-      gsap.to(cardRef.current, {
-        scale: 1,
-        zIndex: 1,
-        duration: 0.4,
-        ease: "power2.inOut"
-      });
-    }
-  }, [isExpanded]);
+const MovieCard = ({ id, title, image, rating, genre }: MovieCardProps) => {
+  const navigate = useNavigate();
 
   const handleClick = () => {
-    setIsExpanded(!isExpanded);
+    navigate(`/movie/${id}`, {
+      state: { title, image, rating, genre }
+    });
   };
 
   return (
     <Card 
-      ref={cardRef}
       onClick={handleClick}
       className="group relative overflow-hidden border-border bg-card transition-all duration-300 hover:scale-105 hover:shadow-glow cursor-pointer flex-shrink-0 w-[200px] md:w-[240px]"
     >

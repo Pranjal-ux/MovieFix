@@ -27,6 +27,7 @@ const MovieRow = ({ title, movies }: MovieRowProps) => {
             {movies.map((movie) => (
               <MovieCard
                 key={movie.id}
+                id={movie.id}
                 title={movie.title}
                 image={movie.image}
                 rating={movie.rating}
