@@ -1,6 +1,8 @@
 import { Play, Plus } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useState, useRef, useEffect } from "react";
+import { gsap } from "gsap";
 
 interface MovieCardProps {
   title: string;
@@ -10,8 +12,37 @@ interface MovieCardProps {
 }
 
 const MovieCard = ({ title, image, rating, genre }: MovieCardProps) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isExpanded && cardRef.current) {
+      gsap.to(cardRef.current, {
+        scale: 1.5,
+        zIndex: 100,
+        duration: 0.4,
+        ease: "power2.out"
+      });
+    } else if (cardRef.current) {
+      gsap.to(cardRef.current, {
+        scale: 1,
+        zIndex: 1,
+        duration: 0.4,
+        ease: "power2.inOut"
+      });
+    }
+  }, [isExpanded]);
+
+  const handleClick = () => {
+    setIsExpanded(!isExpanded);
+  };
+
   return (
-    <Card className="group relative overflow-hidden border-border bg-card transition-all duration-300 hover:scale-105 hover:shadow-glow cursor-pointer flex-shrink-0 w-[200px] md:w-[240px]">
+    <Card 
+      ref={cardRef}
+      onClick={handleClick}
+      className="group relative overflow-hidden border-border bg-card transition-all duration-300 hover:scale-105 hover:shadow-glow cursor-pointer flex-shrink-0 w-[200px] md:w-[240px]"
+    >
       <div className="aspect-[2/3] overflow-hidden">
         <img
           src={image}
